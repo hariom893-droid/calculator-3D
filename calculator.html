@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Calculator</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, #263447, #080c16);
+}
+
+.calculator {
+    width: 330px;
+    padding: 25px;
+    background: linear-gradient(145deg, #303a4a, #151c29);
+    border-radius: 25px;
+    box-shadow:
+        12px 12px 25px #05080e,
+        -8px -8px 20px #46536a;
+}
+
+h2 {
+    text-align: center;
+    color: #00f7ff;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+#display {
+    width: 100%;
+    height: 75px;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    padding: 15px;
+    text-align: right;
+    font-size: 30px;
+    color: #00ffcc;
+    background: #101722;
+    box-shadow: inset 5px 5px 10px #070b11,
+                inset -5px -5px 10px #263346;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+button {
+    height: 58px;
+    border: none;
+    border-radius: 12px;
+    font-size: 21px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(145deg, #344153, #1b2534);
+    box-shadow: 5px 5px 10px #0a101a,
+                -3px -3px 8px #46566d;
+    cursor: pointer;
+    transition: .15s;
+}
+
+button:hover {
+    color: #00ffff;
+}
+
+button:active {
+    transform: translateY(4px);
+    box-shadow: inset 3px 3px 7px #080d14,
+                inset -3px -3px 7px #46566d;
+}
+
+.operator {
+    color: #00eaff;
+}
+
+.clear {
+    color: #ff5050;
+}
+
+.equal {
+    background: linear-gradient(145deg, #00d9a6, #008b72);
+    color: black;
+    grid-row: span 2;
+}
+
+.zero {
+    grid-column: span 2;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <h2>3D CALCULATOR</h2>
+
+    <input type="text" id="display" readonly>
+
+    <div class="buttons">
+
+        <button class="clear" onclick="clearDisplay()">AC</button>
+        <button class="clear" onclick="deleteLast()">DEL</button>
+        <button class="operator" onclick="addValue('%')">%</button>
+        <button class="operator" onclick="addValue('/')">÷</button>
+
+        <button onclick="addValue('7')">7</button>
+        <button onclick="addValue('8')">8</button>
+        <button onclick="addValue('9')">9</button>
+        <button class="operator" onclick="addValue('*')">×</button>
+
+        <button onclick="addValue('4')">4</button>
+        <button onclick="addValue('5')">5</button>
+        <button onclick="addValue('6')">6</button>
+        <button class="operator" onclick="addValue('-')">−</button>
+
+        <button onclick="addValue('1')">1</button>
+        <button onclick="addValue('2')">2</button>
+        <button onclick="addValue('3')">3</button>
+        <button class="operator" onclick="addValue('+')">+</button>
+
+        <button class="zero" onclick="addValue('0')">0</button>
+        <button onclick="addValue('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
+
+    </div>
+</div>
+
+<script>
+
+let display = document.getElementById("display");
+
+function addValue(value) {
+    display.value += value;
+}
+
+function clearDisplay() {
+    display.value = "";
+}
+
+function deleteLast() {
+    display.value = display.value.slice(0, -1);
+}
+
+function calculate() {
+    try {
+        if (!/^[0-9+\-*/%.() ]+$/.test(display.value)) {
+            throw new Error("Invalid");
+        }
+
+        let result = Function(
+            '"use strict"; return (' + display.value + ')'
+        )();
+
+        if (!Number.isFinite(result)) {
+            throw new Error("Invalid");
+        }
+
+        display.value = result;
+
+    } catch {
+        display.value = "Error";
+    }
+}
+
+</script>
+
+</body>
+</html>
